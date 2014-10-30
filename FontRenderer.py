@@ -1,5 +1,5 @@
 import numpy as np
-from PIL import ImageFont, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 def monaco(size):
     return ImageFont.truetype("./fonts/Monaco.ttf", size)
@@ -26,5 +26,5 @@ class FontRenderer(object):
         '''Find the bounding box for the text given the font properties,
         relies on font being monospace'''
         x, y = self._font.getmetrics()
-        z = len(text) * (x + y)
-        return (x + y) / 2, z
+        z = (x + y)
+        return len(text) * z / 2, z

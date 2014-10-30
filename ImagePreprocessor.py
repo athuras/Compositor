@@ -1,7 +1,8 @@
-from PIL import Image, ImageOps, ImageFilter
+from PIL import Image, ImageOps, ImageFilter, ImageEnhance
 
 class ImagePreprocessor(object):
-    """Class to encapsulate common image preprocessing tasks"""
+    """Class to encapsulate common image preprocessing tasks,
+    image will be forced to greyscale"""
     def __init__(self, sharpness=1, brightness=1, scale=1, kmedian=1):
         """
         :sharpness: coefficient for default unsharp masking
@@ -12,6 +13,9 @@ class ImagePreprocessor(object):
         self._brightness = brightness
         self._scale = scale
         self._kmedian = kmedian
+
+    def grayscale(self, img):
+        return ImageOps.grayscale(img).convert('L')
 
     def sharpen(self, img):
         enhancer = ImageEnhance.Sharpness(img)
@@ -32,9 +36,9 @@ class ImagePreprocessor(object):
         '''Apply each of the filters consecutively,
         returns the processed image
         :img: PIL.Image object.'''
-        assert type(img) is Image
-        def right_apply(x, f): f(x)
-        operations = [self.median_filter,
+        def right_apply(x, f): return f(x)
+        operations = [self.grayscale,
+                      self.median_filter,
                       self.brighten,
                       self.sharpen,
                       self.scale]

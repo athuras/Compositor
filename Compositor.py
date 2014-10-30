@@ -1,15 +1,7 @@
 import numpy as np
 import FontRenderer
 import ImagePreprocessor
-
-alphabet = "abcdefghijklmnopqrstuvwxyz"
-numeric = "1234567890"
-symbols = """!@#$%^&*()_+-=[]{}\|;:'"/?.>,<`~"""
-shenanigans1 = """¡™£¢∞§¶•ªº–≠œ∑®†øπ“‘«åß∂ƒ©˙∆˚¬…æΩ≈ç√∫˜˜µ≤≥÷"""
-shenanigans2 = """⁄€‹›ﬁﬂ‡°·‚—±Œ„‰ˇÁ¨ˆØ∏”’»ÅÍÎÏ˝ÓÔÒÚÆ¸˛Ç◊ı˜Â¯˘¿"""
-alpha_numeric = alphabet + alphabet.upper() + numeric + symbols
-
-cacophony = alpha_numeric + shenanigans1 + shenanigans2
+from itertools import izip
 
 def truncate_image(big_img, base_shape):
     '''
@@ -23,7 +15,8 @@ def truncate_image(big_img, base_shape):
 
 class ImageIndexer(object):
     '''Useful abstraction for iterating over sub-images,
-    can also be used to mutate stuff ... if you're into that sort of thing'''
+    can also be used to mutate stuff ... if you're into that sort of thing
+    '''
     def __init__(self, base_shape):
         self._base_shape = base_shape
 
@@ -37,13 +30,20 @@ class ImageIndexer(object):
         '''Returns an iterator of index-points separated by base_shape'''
         n, m = self.shape(img)
         dx, dy = self._base_shape
-        return ((i * dx, j * dy) for i in xrange(n)
-                                 for j in xrange(m))
+        return ((i * dx, j * dy) for j in xrange(m)
+                                 for i in xrange(n))
+
+    def sub_indices(self, img):
+        '''an iterator of (x1, x2, y1, y2) tuples.
+        Same order as Indexer.indices'''
+        dx, dy = self._base_shape
+        return ((i, i + dx, j, j + dy) for i, j in self.indices(img))
+
     def sub_images(self, img):
         '''Returns an iterator of sub-images of the
-        truncated image. Same order as Indexer.indices'''
-        dx, dy = self._base_shape
-        return (img[i:i+dx, j:j+dy] for i, j in self.indices(img))
+        truncated image. Same order as Indexer.indices
+        Warning, returned images are not necessarily views.'''
+        return (img[x1:x2, y1:y2] for (x1, x2, y1, y2) in self.sub_indices(img))
 
 
 #  Vectorized error functions designed to broadcase along a tertiary axis.
@@ -61,9 +61,9 @@ class Compositor(object):
     Composes a fontrender and preprocessor into one glorious pipeline
     '''
     def __init__(self, preprocessor, fontRenderer, cost_fn=deep_error):
-        self._font = fontRenderer
+        self._fontRenderer = fontRenderer
         self._preprocessor = preprocessor
-        self._cost_fn
+        self._cost_fn = cost_fn
 
     def gen_label_table(self, palette):
         '''useful for decoding the output'''
@@ -73,14 +73,15 @@ class Compositor(object):
         '''Render a set of glyphs, one for each string in the palette,
         :palette: iterable[String], i.e. "abcdef" or ["ab", "cd"]
             the length of each component must be identical.'''
-        _render = self._fontRenderer.render
+        def _render(x):
+            return np.asarray(self._fontRenderer.render(x).convert('L')).T
         return np.dstack([_render(s) for s in sorted(palette)])
 
-    def base_shape(self, palette): return self._font.get_bbox(palette[0])
+    def base_shape(self, palette): return self._fontRenderer.get_bbox(palette[0])
 
     def prepare_image(self, image, palette):
         '''applies preprocessing, and truncates so the palette fits evenly'''
-        img = truncate_image(np.asarray(self._preprocessor.process(image)),
+        img = truncate_image(np.asarray(self._preprocessor.process(image)).T,
                              self.base_shape(palette))
         return img
 
@@ -123,6 +124,7 @@ class Compositor(object):
         labels = self.composite(img, palette, preprocess=False)
 
         canvas = np.empty_like(img)
-        for subimage, l in izip(indexer.sub_images(canvas), labels):
-            subimage = masks[:,:,l]
+
+        for ((x1, x2, y1, y2), l) in izip(indexer.sub_indices(img), labels):
+            canvas[x1:x2, y1:y2] = masks[:,:,l]
         return canvas  # hopefully non-empty...
