@@ -1,8 +1,10 @@
 Compositor
 ==========
 
-Morphologically optimal ASCII art generator.
+Morphologically optimal ASCII art generator (with unicode support!).
 Instead of matching glyphs based on area, match based on some cost function of bitmap overlays.
+
+Currently, Compositor supports rendering arbitrary image files (whatever can be opened by PIL) as either an arbitrarily high quality bitmap rendering, or as 'traditional' text characters.
 
 [Demo](http://nbviewer.ipython.org/github/athuras/Compositor/blob/master/Demo.ipynb)
 
