@@ -25,7 +25,7 @@ setup(
         ]
     keywords='ascii art image processing',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    install_requires=['numpy', 'docopts', 'pillow'],
+    install_requires=['numpy', 'docopt', 'pillow'],
     package_data={'sample': ['package_data.dat']},
-    entry_points={'console_scripts': ['Compositor=Compositor:main']},
+    entry_points={'console_scripts': ['Compositor=Compositor.ui:main']},
 )
