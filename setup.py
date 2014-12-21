@@ -22,10 +22,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3'
-        ]
-    keywords='ascii art image processing',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+        ],
+    packages=['Compositor'],
     install_requires=['numpy', 'docopt', 'pillow'],
-    package_data={'sample': ['package_data.dat']},
+    package_dir={'Compositor': 'Compositor'},
+    package_data={'Compositor': ['fonts/*.ttf']},
     entry_points={'console_scripts': ['Compositor=Compositor.ui:main']},
 )
