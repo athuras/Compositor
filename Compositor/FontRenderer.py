@@ -1,11 +1,16 @@
-import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+import numpy as np
+import os
+
+_ROOT = os.path.abspath(os.path.dirname(__file__))
+def get_data_path(path):
+        return os.path.join(_ROOT, 'data', path)
 
 def monaco(size):
-    return ImageFont.truetype("./fonts/Monaco.ttf", size)
+    return ImageFont.truetype(get_data_path("Monaco.ttf"), size)
 
 def courier(size):
-    return ImageFont.truetype("./fonts/Courier.ttf", size)
+    return ImageFont.truetype(get_data_path("Courier.ttf"), size)
 
 class FontRenderer(object):
     def __init__(self, font, ink=(0, 0, 0, 255), fill=(255, 255, 255, 0)):
