@@ -1,33 +1,59 @@
 Compositor
 ==========
 
-Morphologically optimal ASCII art generator (with unicode support!).
-Instead of matching glyphs based on area, match based on some cost function of bitmap overlays.
+    Usage:
+        compositor text (-u IMAGE_URL | -f IMAGE_FILE ) [options]
+        compositor image (-u IMAGE_URL | -f IMAGE_FILE ) OUTPUT_FILE [options]
+        compositor (-h | --help | --version)
 
-Currently, Compositor supports rendering arbitrary image files (whatever can be opened by PIL) as either an arbitrarily high quality bitmap rendering, or as 'traditional' text characters.
+    Options:
+        -h, --help                         show this help message and exit
+        --version                          show version and exit
+        -u IMAGE_URL, --url IMAGE_URL      Read an image from a URL as imput.
+        -f IMAGE_FILE        Read an image from a file as input.
+        --sharpness=<float>  preprocessing sharpness value. [default: 1]
+        --kmedian=<int>      preprocessing median filter value. [default: 1]
+        --scale=<int>        preprocessing resolution modification. [default: 1]
+        --brightness=<int>   preprocessing gamme correction. [default: 1]
+        --font_size=<int>    font rendering size, at least 20 is recommended. [default: 24]
 
-[Demo](http://nbviewer.ipython.org/github/athuras/Compositor/blob/master/Demo.ipynb)
+Demo 1:
+------
 
-Here is a relatively low-res version of the Python (TM) logo, that blip in the upper right is a trademark, in case anybody was wondering.
+    $ Compositor text \
+      -u http://img4.wikia.nocookie.net/__cb20130517001619/p__/protagonist/images/f/f1/Bastila-shan.png \
+      --scale=2 --sharpness=1.4 --kmedian=5 --font_size=24
+
+                           __
+                      WW`=iiHH VWWWWWWWWWWW
+                      WW g@WMi `**WWWWWWWWW
+                      WWW WWH!  ,WWWW*<WWWW
+                      WW'|!*iH_/%WWW`WWWWWW
+                      `_=iH!HHH!!Q*<WWWWWWW
+                      iHH!Hi!H!<W`WWWW^\WWW
+                      wuHW!H!!W*<WVWW' {WWW
+                     {W& g*,<W`{WziW   {WWW
+                    ,**,WWWW*,W**!H    {WWW
+                    ^*i@W&W`{WiiH!!!   {WWW
+                     H!G6{,W*iHHHHH|   {WWW
+                     H,:zWWiHHHHHHH]*WWWWWW
+    wwwwwwwwwwwwwwwwy8Wzj!HHHH!!HHH@ WWWWWW
+    WWWWWWWWWWWWWWWWW&gu0&!HHHz&H!.!:
+    WWW`       WWWW*)WW{0&!HHH<W!! `
+    WWW      ,WWWW`^WWW/VWHHHHDWzH
+    WWW     ^WWWV,WWWW@  W!HH]'Wg!
+    WWW   ,WWWW*<WWWWW   Wi!-  WW!
+    WWW  <WWWW WWWW*WW   &Hi   `&H!
+    WWWvWWWW//WWWW` {WW< *iH    z!H!
+    WWWWWWW`0WWWW   {WWW;.HH     HHR
+    WWWWW^/WWWW'    {WWW} HH     !HH
+    WWWW`WWWWW      {WWW} gH     `!H
+    WWWyWWWW(,,,,,,,8WWW'/ii      iy^
+    WWWWWWWWWWWWWWWWWWW}(HHF       RUH
 
 
-           .~~==~~_                                              `8
-         ,z*\"zooooo!\\                                      ~    {!8                                <~; ;
-         {o`oooooz!!!                                     S!    {!8                                  K*x
-     .<xxxxxxxxx!!!!!;ww>          ~m,*=m.   .m      xm  m*!nm  {!8.<mom.     <^*\\m..    .:^f*n~
-    Aoooooooo!!!!!!!!{WWWW,      ;!}    \\!e  :!      z!   S!    {!J*`  *!^  /!/   `8!   !3   `\\!z
-    ooooooo!!!!!!!!j\"@WWWWW      ;!}     z!  :!      z!   S!    {!8     !o  !b      !z  !B     !!
-    oooooj(wwwwwwwwWWWWWWWW      ;!}     x!' :!      z!   S!    {!8     !o '!D      !!  !B     !!
-    zo!!!QWWWWWWWWWWWWWWWW*      ;!}     !!  ;!:     z!   S!    {!8     !o  U!     .!*  !B     !!
-    .x!!!QWWWWWWWWWWWWWWWW       ;!Gz>=n!J`   !!z>=mjj!   '!^~  {!8     !o   x!=~~^y:   !B     !!
-         {WWWWWwwwwww            ;!}  `          `   x!       `                 `
-         <WWWWWWW/ VW            ;!}                _!/
-          ^WWWWWWWWW`            :j}             ^fx~
-        ,,>~<wwwwwwy~,,                          `
-     <@@@@@@@@%%%%@@@@@@@%
-      **@@@@%%@@@%%@@@@@*`
-
-Alternatively:
+Demo 2 (Same Image, just bigger):
+-----------------------------------
 
     $ Compositor text -u http://img4.wikia.nocookie.net/__cb20130517001619/p__/protagonist/images/f/f1/Bastila-shan.png --scale=2 --sharpness=1.4 --kmedian=5 --font_size=14
 
