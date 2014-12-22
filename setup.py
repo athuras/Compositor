@@ -26,6 +26,6 @@ setup(
     packages=['Compositor'],
     install_requires=['numpy', 'docopt', 'pillow'],
     package_dir={'Compositor': 'Compositor'},
-    package_data={'Compositor': ['fonts/*.ttf']},
+    package_data={'Compositor': ['data/*.ttf']},
     entry_points={'console_scripts': ['Compositor=Compositor.ui:main']},
 )
