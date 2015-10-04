@@ -1,5 +1,7 @@
-Compositor
+Compositor: Morphologically Optimal ASCII Art
 ==========
+
+See the [PyPI description](https://pypi.python.org/pypi/Compositor/1.0.1) for a much wittier spiel.
 
     Usage:
         compositor text (-u IMAGE_URL | -f IMAGE_FILE ) [options]
