@@ -1,4 +1,5 @@
 from PIL import Image, ImageOps, ImageFilter, ImageEnhance
+from functools import reduce
 
 class ImagePreprocessor(object):
     """Class to encapsulate common image preprocessing tasks,
@@ -29,7 +30,7 @@ class ImagePreprocessor(object):
         return img.filter(ImageFilter.MedianFilter(self._kmedian))
 
     def scale(self, img, resample=Image.BICUBIC):
-        x, y = map(lambda z: int(z * self._scale), img.size)
+        x, y = [int(z * self._scale) for z in img.size]
         return img.resize(size=(x, y), resample=resample)
 
     def process(self, img):
