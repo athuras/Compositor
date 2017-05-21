@@ -3,7 +3,7 @@
 
 # In[1]:
 
-get_ipython().magic(u'pylab --no-import-all inline')
+get_ipython().magic('pylab --no-import-all inline')
 import numpy as np
 import scipy as sp
 import scipy.ndimage as ndimg
@@ -14,10 +14,10 @@ from PIL import ImageFont, ImageDraw, Image, ImageFilter, ImageEnhance
 import PIL
 from fractions import gcd
 
-import urllib
-import cStringIO
+import urllib.request, urllib.parse, urllib.error
+import io
 
-from itertools import izip
+
 
 
 # ## To extract the .ttf fonts from .dfont object, we'll use "fondu"
@@ -102,7 +102,7 @@ for c, ax in zip(masks, axes.flat):
 # In[9]:
 
 def get_image_from_url(url):
-    f = cStringIO.StringIO(urllib.urlopen(url).read())
+    f = io.StringIO(urllib.request.urlopen(url).read())
     img = Image.open(f)
     return img
 
@@ -126,8 +126,8 @@ def ordered_indexer(big_image, block_shape):
     '''Returns an iterator of index-points'''
     n, m = big_image.shape
     dx, dy = block_shape
-    return ((i * dx, j * dy) for i in xrange(n / dx)
-                             for j in xrange(m / dy))
+    return ((i * dx, j * dy) for i in range(n / dx)
+                             for j in range(m / dy))
 
 def step_through(big_image, block_shape):
     '''Returns an iterator of block_size sub-images within big_image'''
@@ -156,7 +156,7 @@ def reconstruct_render(big_image, labels, mask_table):
     dx, dy = block_shape
     canvas = np.empty_like(big_image)
     indexer = ordered_indexer(big_image, block_shape)
-    for ((i, j), l) in izip(indexer, labels):
+    for ((i, j), l) in zip(indexer, labels):
         canvas[i:i + dx, j:j + dy] = mask_table[:,:,l]
     return canvas
 

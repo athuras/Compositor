@@ -18,13 +18,13 @@ Options:
     --brightness=<int>   preprocessing gamme correction. [default: 1]
     --font_size=<int>    font rendering size, at least 20 is recommended. [default: 24]
 """
-from Compositor import Compositor
-from FontRenderer import FontRenderer, monaco
-from ImagePreprocessor import ImagePreprocessor
+from .Compositor import Compositor
+from .FontRenderer import FontRenderer, monaco
+from .ImagePreprocessor import ImagePreprocessor
 from docopt import docopt
-from util import get_image_from_url
+from .util import get_image_from_url
 from PIL import Image
-from Palettes import *
+from .Palettes import *
 
 
 def main():
@@ -58,7 +58,7 @@ def main():
 def gen_text(comp, img, palette):
     '''Write the composite to stdout'''
     s = ''.join(comp.render_text_composite(img, palette))
-    print s
+    print(s)
 
 def gen_image(comp, img, output_file, palette):
     '''Generate image composite'''

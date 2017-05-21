@@ -1,7 +1,7 @@
 import numpy as np
-import FontRenderer
-import ImagePreprocessor
-from itertools import izip
+from . import FontRenderer
+from . import ImagePreprocessor
+
 
 def truncate_image(big_img, base_shape):
     '''
@@ -30,8 +30,8 @@ class ImageIndexer(object):
         '''Returns an iterator of index-points separated by base_shape'''
         n, m = self.shape(img)
         dx, dy = self._base_shape
-        return ((i * dx, j * dy) for j in xrange(m)
-                                 for i in xrange(n))
+        return ((i * dx, j * dy) for j in range(m)
+                                 for i in range(n))
 
     def sub_indices(self, img):
         '''an iterator of (x1, x2, y1, y2) tuples.
@@ -125,6 +125,6 @@ class Compositor(object):
 
         canvas = np.empty_like(img)
 
-        for ((x1, x2, y1, y2), l) in izip(indexer.sub_indices(img), labels):
+        for ((x1, x2, y1, y2), l) in zip(indexer.sub_indices(img), labels):
             canvas[x1:x2, y1:y2] = masks[:,:,l]
         return canvas  # hopefully non-empty...
